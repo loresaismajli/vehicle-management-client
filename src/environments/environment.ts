@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    baseUrl: 'http://localhost:5139/api/',
+    baseUrl: 'http://localhost:5245/api/',
     keys: {
       accessToken: 'accessToken',
       authorization: 'Authorization',

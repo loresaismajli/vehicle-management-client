@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { PrivateComponent } from './private.component';
+import { SharedModule } from '../../shared/shared.module';
+import { PrivateRoutingModule } from './private-routing.module';
 
 
 
@@ -9,7 +11,8 @@ import { PrivateComponent } from './private.component';
     PrivateComponent
   ],
   imports: [
-    CommonModule
+    SharedModule,
+    PrivateRoutingModule
   ]
 })
 export class PrivateModule { }

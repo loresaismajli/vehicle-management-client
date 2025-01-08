@@ -1,7 +1,7 @@
 export interface JwtInfo {
   accessToken: string;
   userId: number;
-  username: string;
+  email: string;
   firstName: string;
   lastName: string;
   roleId: string;

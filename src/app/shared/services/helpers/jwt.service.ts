@@ -18,11 +18,11 @@ export class JwtService {
 
   decode(accessToken: string): JwtInfo {
     const data = jwtDecode(accessToken) as any;
-    const { userId, username, firstName, lastName, roleId, role, exp } = data;
+    const { userId, email, firstName, lastName, roleId, role, exp } = data;
     const info: JwtInfo = {
       accessToken,
       userId,
-      username,
+      email,
       firstName,
       lastName,
       roleId,

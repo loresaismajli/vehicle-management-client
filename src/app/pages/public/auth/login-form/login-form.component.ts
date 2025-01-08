@@ -33,7 +33,7 @@ export class LoginFormComponent {
   //#region form
   createLoginFormGroup(): void {
     this.loginForm = new FormGroup({
-      username: new FormControl(null, Validators.required),
+      email: new FormControl(null, Validators.required),
       password: new FormControl(null, Validators.required),
     });
   }
@@ -72,8 +72,8 @@ export class LoginFormComponent {
   }
 
   private mapLoginFromForm(): Login {
-    const { username, password } = this.loginForm.value;
-    const login: Login = { username, password };
+    const { email, password } = this.loginForm.value;
+    const login: Login = { email, password };
     return login;
   }
 
