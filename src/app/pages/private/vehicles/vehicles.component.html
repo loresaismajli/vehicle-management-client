@@ -1,5 +1,245 @@
 <div class="btn-group d-flex" role="group" aria-label="Basic example">
-    <button type="button" class="btn btn-secondary">View all</button>
-    <button type="button" class="btn btn-warning">Edit</button>
-    <button type="button" class="btn btn-success">Create</button>
+    <button (click)="onChangeMenu('list')" type="button" class="btn btn-secondary">View all</button>
+    <button (click)="onChangeMenu('create')" type="button" class="btn btn-success">Create</button>
+</div>
+
+
+<div *ngIf="menu == 'list' && vehicles">
+    <h2>Vehicles List</h2>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">VIN</th>
+                <th scope="col">Production Year</th>
+                <th scope="col">Vehicle Model</th>
+                <th scope="col">Producer</th>
+                <th scope="col">Vehicle Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through your vehicle data -->
+            <tr *ngFor="let i of vehicles">
+                <td>{{i.id}}</td>
+                <td>{{i.name}}</td>
+                <td>{{i.vin}}</td>
+                <td>{{i.productionYear}}</td>
+                <td>{{i.vehicleModelId}}</td>
+                <td>{{i.producerId}}</td>
+                <td>{{i.vehicleTypeId}}</td>
+                <td>
+                    <button (click)="onChangeMenu('details', i.id)" class="btn btn-warning btn-sm">Edit</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div *ngIf="menu == 'details'  && vehicle">
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Vehicle Details</h2>
+
+        <!-- Vehicle Main Details -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Vehicle Information</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th scope="row">ID</th>
+                            <td>{{ vehicle.id }}</td> <!-- Vehicle ID -->
+                        </tr>
+                        <tr>
+                            <th scope="row">Name</th>
+                            <td>{{ vehicle.name }}</td> <!-- Vehicle Name -->
+                        </tr>
+                        <tr>
+                            <th scope="row">VIN</th>
+                            <td>{{ vehicle.vin }}</td> <!-- Vehicle VIN -->
+                        </tr>
+                        <tr>
+                            <th scope="row">Production Year</th>
+                            <td>{{ vehicle.productionYear }}</td> <!-- Production Year -->
+                        </tr>
+                        <tr>
+                            <th scope="row">Vehicle Model</th>
+                            <td>{{ vehicle.vehicleModel?.name }}</td> <!-- Vehicle Model -->
+                        </tr>
+                        <tr>
+                            <th scope="row">Producer</th>
+                            <td>{{ vehicle.producer?.name }}</td> <!-- Vehicle Producer -->
+                        </tr>
+                        <tr>
+                            <th scope="row">Vehicle Type</th>
+                            <td>{{ vehicle.vehicleType?.name }}</td> <!-- Vehicle Type -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Related Information -->
+        <div class="mt-4">
+            <h4>Related Information</h4>
+            <div class="row">
+                <!-- Vehicle Reports -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Vehicle Reports</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li *ngFor="let report of vehicle.vehicleReports" class="list-group-item">
+                                    {{ report.description }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Consumptions -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Consumptions</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li *ngFor="let consumption of vehicle.consumptions" class="list-group-item">
+                                    Fuel Type: {{ consumption.fuelType }} | Last Consumption: {{ consumption.amount }} L
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <!-- Services -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Services</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li *ngFor="let service of vehicle.services" class="list-group-item">
+                                    {{ service.name }} - Date: {{ service.date | date }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accidents -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Accidents</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li *ngFor="let accident of vehicle.accidents" class="list-group-item">
+                                    {{ accident.description }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-4">
+            <a routerLink="/vehicles" class="btn btn-secondary">Back to List</a>
+            <a routerLink="/vehicles/edit/{{ vehicle.id }}" class="btn btn-warning">Edit Vehicle</a>
+        </div>
+    </div>
+
+    <!-- Modal for Delete Confirmation -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this vehicle? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="menu == 'create'">
+    <div class="container mt-5">
+        <h2>Create New Vehicle</h2>
+        
+        <!-- Reactive Vehicle Form -->
+        <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Vehicle Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Vehicle Name</label>
+                        <input type="text" id="name" class="form-control" formControlName="name">
+                        <div *ngIf="vehicleForm.get('name').invalid && vehicleForm.get('name').touched" class="text-danger">
+                            Name is required.
+                        </div>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="vin" class="form-label">VIN</label>
+                        <input type="text" id="vin" class="form-control" formControlName="vin">
+                        <div *ngIf="vehicleForm.get('vin').invalid && vehicleForm.get('vin').touched" class="text-danger">
+                            VIN is required.
+                        </div>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="productionYear" class="form-label">Production Year</label>
+                        <input type="number" id="productionYear" class="form-control" formControlName="productionYear">
+                        <div *ngIf="vehicleForm.get('productionYear').invalid && vehicleForm.get('productionYear').touched" class="text-danger">
+                            Production year is required.
+                        </div>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="vehicleModel" class="form-label">Vehicle Model</label>
+                        <select id="vehicleModel" class="form-select" formControlName="vehicleModelId">
+                            <option *ngFor="let model of vehicleModels" [value]="model.id">{{ model.name }}</option>
+                        </select>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="producer" class="form-label">Producer</label>
+                        <select id="producer" class="form-select" formControlName="producerId">
+                            <option *ngFor="let producer of producers" [value]="producer.id">{{ producer.name }}</option>
+                        </select>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="vehicleType" class="form-label">Vehicle Type</label>
+                        <select id="vehicleType" class="form-select" formControlName="vehicleTypeId">
+                            <option *ngFor="let type of vehicleTypes" [value]="type.id">{{ type.name }}</option>
+                        </select>
+                    </div>
+    
+                    <button type="submit" class="btn btn-primary" [disabled]="vehicleForm.invalid">Create Vehicle</button>
+                    <a routerLink="/vehicles" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
