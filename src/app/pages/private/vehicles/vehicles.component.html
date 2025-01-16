@@ -183,7 +183,7 @@
 <div *ngIf="menu == 'create'">
     <div class="container mt-5">
         <h2>Create New Vehicle</h2>
-        
+
         <!-- Reactive Vehicle Form -->
         <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()">
             <div class="card">
@@ -194,49 +194,42 @@
                     <div class="mb-3">
                         <label for="name" class="form-label">Vehicle Name</label>
                         <input type="text" id="name" class="form-control" formControlName="name">
-                        <div *ngIf="vehicleForm.get('name').invalid && vehicleForm.get('name').touched" class="text-danger">
-                            Name is required.
-                        </div>
                     </div>
-    
+
                     <div class="mb-3">
                         <label for="vin" class="form-label">VIN</label>
                         <input type="text" id="vin" class="form-control" formControlName="vin">
-                        <div *ngIf="vehicleForm.get('vin').invalid && vehicleForm.get('vin').touched" class="text-danger">
-                            VIN is required.
-                        </div>
                     </div>
-    
+
                     <div class="mb-3">
                         <label for="productionYear" class="form-label">Production Year</label>
                         <input type="number" id="productionYear" class="form-control" formControlName="productionYear">
-                        <div *ngIf="vehicleForm.get('productionYear').invalid && vehicleForm.get('productionYear').touched" class="text-danger">
-                            Production year is required.
-                        </div>
                     </div>
-    
+
                     <div class="mb-3">
                         <label for="vehicleModel" class="form-label">Vehicle Model</label>
                         <select id="vehicleModel" class="form-select" formControlName="vehicleModelId">
                             <option *ngFor="let model of vehicleModels" [value]="model.id">{{ model.name }}</option>
                         </select>
                     </div>
-    
+
                     <div class="mb-3">
                         <label for="producer" class="form-label">Producer</label>
                         <select id="producer" class="form-select" formControlName="producerId">
-                            <option *ngFor="let producer of producers" [value]="producer.id">{{ producer.name }}</option>
+                            <option *ngFor="let producer of producers" [value]="producer.id">{{ producer.name }}
+                            </option>
                         </select>
                     </div>
-    
+
                     <div class="mb-3">
                         <label for="vehicleType" class="form-label">Vehicle Type</label>
                         <select id="vehicleType" class="form-select" formControlName="vehicleTypeId">
                             <option *ngFor="let type of vehicleTypes" [value]="type.id">{{ type.name }}</option>
                         </select>
                     </div>
-    
-                    <button type="submit" class="btn btn-primary" [disabled]="vehicleForm.invalid">Create Vehicle</button>
+
+                    <button type="submit" class="btn btn-primary" [disabled]="vehicleForm.invalid">Create
+                        Vehicle</button>
                     <a routerLink="/vehicles" class="btn btn-secondary ms-2">Cancel</a>
                 </div>
             </div>
