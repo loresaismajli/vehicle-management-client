@@ -19,6 +19,7 @@ export class UserService {
     }
 
     createUser(user: any): Observable<any> {
+        debugger;
         const path: string = 'users';
         return this.http.post<any>({ path, body: user });
     }

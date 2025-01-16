@@ -1,5 +1,153 @@
 <div class="btn-group d-flex" role="group" aria-label="Basic example">
-    <button type="button" class="btn btn-secondary">View all</button>
-    <button type="button" class="btn btn-warning">Edit</button>
-    <button type="button" class="btn btn-success">Create</button>
+    <button (click)="onChangeMenu('list')" type="button" class="btn btn-secondary">View all</button>
+    <button (click)="onChangeMenu('create')" type="button" class="btn btn-success">Create</button>
+</div>
+
+<!-- Service List -->
+<div *ngIf="menu == 'list' && services">
+    <h2>Services List</h2>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Service Number</th>
+                <th scope="col">Service Name</th>
+                <th scope="col">User</th>
+                <th scope="col">Vehicle</th>
+                <th scope="col">Service Type</th>
+                <th scope="col">Date</th>
+                <th scope="col">Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let service of services">
+                <td>{{ service.id }}</td>
+                <td>{{ service.number }}</td>
+                <td>{{ service.name }}</td>
+                <td>{{ service.user?.firstName }} {{ service.user?.lastName }}</td>
+                <td>{{ service.vehicle?.name }}</td>
+                <td>{{ service.serviceTypeId }}</td>
+                <td>{{ service.date | date }}</td>
+                <td>{{ service.totalPrice | currency }}</td>
+                <td>
+                    <button (click)="onChangeMenu('details', service.id)" class="btn btn-warning btn-sm">Edit</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Service Details -->
+<div *ngIf="menu == 'details' && service">
+    <div class="container mt-5">
+        <h2 class="mb-4">Service Details</h2>
+
+        <div class="card">
+            <div class="card-header">
+                <h5>Service Information</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th scope="row">ID</th>
+                            <td>{{ service.id }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Service Number</th>
+                            <td>{{ service.number }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Service Name</th>
+                            <td>{{ service.name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">User</th>
+                            <td>{{ service.user?.firstName }} {{ service.user?.lastName }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Vehicle</th>
+                            <td>{{ service.vehicle?.name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Service Type</th>
+                            <td>{{ service.serviceTypeId }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Date</th>
+                            <td>{{ service.date | date }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Total Price</th>
+                            <td>{{ service.totalPrice | currency }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a routerLink="/services" class="btn btn-secondary">Back to List</a>
+            <a routerLink="/services/edit/{{ service.id }}" class="btn btn-warning">Edit Service</a>
+        </div>
+    </div>
+</div>
+
+<!-- Create Service Form -->
+<div *ngIf="menu == 'create'">
+    <div class="container mt-5">
+        <h2>Create New Service</h2>
+
+        <!-- Reactive Service Form -->
+        <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Service Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="number" class="form-label">Service Number</label>
+                        <input type="text" id="number" class="form-control" formControlName="number">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Service Name</label>
+                        <input type="text" id="name" class="form-control" formControlName="name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="userId" class="form-label">User ID</label>
+                        <input type="number" id="userId" class="form-control" formControlName="userId">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="vehicleId" class="form-label">Vehicle</label>
+                        <select id="vehicleId" class="form-select" formControlName="vehicleId">
+                            <option *ngFor="let vehicle of vehicles" [value]="vehicle.id">{{ vehicle.name }}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="serviceTypeId" class="form-label">Service Type</label>
+                        <select id="serviceTypeId" class="form-select" formControlName="serviceTypeId">
+                            <option *ngFor="let serviceType of serviceTypes" [value]="serviceType.id">{{ serviceType.name }}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" id="date" class="form-control" formControlName="date">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="totalPrice" class="form-label">Total Price</label>
+                        <input type="number" id="totalPrice" class="form-control" formControlName="totalPrice">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" [disabled]="serviceForm.invalid">Create Service</button>
+                    <a routerLink="/services" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

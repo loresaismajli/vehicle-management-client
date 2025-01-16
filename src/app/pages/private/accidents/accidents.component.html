@@ -1,5 +1,144 @@
 <div class="btn-group d-flex" role="group" aria-label="Basic example">
-    <button type="button" class="btn btn-secondary">View all</button>
-    <button type="button" class="btn btn-warning">Details</button>
-    <button type="button" class="btn btn-success">Create</button>
+    <button (click)="onChangeMenu('list')" type="button" class="btn btn-secondary">View all</button>
+    <button (click)="onChangeMenu('create')" type="button" class="btn btn-success">Create</button>
+</div>
+
+<!-- Accident List -->
+<div *ngIf="menu == 'list' && accidents">
+    <h2>Accidents List</h2>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Description</th>
+                <th scope="col">Guilty</th>
+                <th scope="col">User</th>
+                <th scope="col">Vehicle</th>
+                <th scope="col">Date</th>
+                <th scope="col">Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let accident of accidents">
+                <td>{{ accident.id }}</td>
+                <td>{{ accident.description }}</td>
+                <td>{{ accident.isGuilty ? 'Yes' : 'No' }}</td>
+                <td>{{ accident.userId }}</td>
+                <td>{{ accident.vehicleId }}</td>
+                <td>{{ accident.date | date }}</td>
+                <td>{{ accident.totalPrice | currency }}</td>
+                <td>
+                    <button (click)="onChangeMenu('details', accident.id)" class="btn btn-warning btn-sm">Edit</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Accident Details -->
+<div *ngIf="menu == 'details' && accident">
+    <div class="container mt-5">
+        <h2 class="mb-4">Accident Details</h2>
+
+        <div class="card">
+            <div class="card-header">
+                <h5>Accident Information</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th scope="row">ID</th>
+                            <td>{{ accident.id }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Description</th>
+                            <td>{{ accident.description }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Guilty</th>
+                            <td>{{ accident.isGuilty ? 'Yes' : 'No' }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">User ID</th>
+                            <td>{{ accident.userId }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Vehicle ID</th>
+                            <td>{{ accident.vehicleId }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Date</th>
+                            <td>{{ accident.date | date }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Total Price</th>
+                            <td>{{ accident.totalPrice | currency }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a routerLink="/accidents" class="btn btn-secondary">Back to List</a>
+            <a routerLink="/accidents/edit/{{ accident.id }}" class="btn btn-warning">Edit Accident</a>
+        </div>
+    </div>
+</div>
+
+<!-- Create Accident Form -->
+<div *ngIf="menu == 'create'">
+    <div class="container mt-5">
+        <h2>Create New Accident</h2>
+
+        <!-- Reactive Accident Form -->
+        <form [formGroup]="accidentForm" (ngSubmit)="onSubmit()">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Accident Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" id="description" class="form-control" formControlName="description">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="isGuilty" class="form-label">Is Guilty</label>
+                        <select id="isGuilty" class="form-select" formControlName="isGuilty">
+                            <option [value]="true">Yes</option>
+                            <option [value]="false">No</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="userId" class="form-label">User ID</label>
+                        <input type="number" id="userId" class="form-control" formControlName="userId">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="vehicleId" class="form-label">Vehicle ID</label>
+                        <select id="vehicleId" class="form-select" formControlName="vehicleId">
+                            <option *ngFor="let role of vehicles" [value]="role.id">{{ role.name }}</option>
+                        </select>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" id="date" class="form-control" formControlName="date">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="totalPrice" class="form-label">Total Price</label>
+                        <input type="number" id="totalPrice" class="form-control" formControlName="totalPrice">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" [disabled]="accidentForm.invalid">Create Accident</button>
+                    <a routerLink="/accidents" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

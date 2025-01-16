@@ -10,7 +10,7 @@ export class AccidentsService {
     constructor(private http: HttpService) { }
 
     getAccidents(): Observable<any[]> {
-        const path: string = 'accident';
+        const path: string = 'accidents';
         return this.http.get<any[]>({ path });
     }
 
